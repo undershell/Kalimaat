@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html dir="rtl">
+
+<head>
+<meta charset="utf-8">
+<title>مختبر التجارب المعجمية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Bootstrap core CSS -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+<![endif]-->
+
+<!--<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/droid-arabic-kufi" type="text/css"/>-->
+
+
+<style>
+/**{
+   font-family: 'DroidArabicKufiRegular'; 
+   font-weight: normal; 
+   font-style: normal; 
+}*/
+*
+
+*{
+font-size:1.2em;
+}
+
+.mini{
+	width:50px;
+}
+#box{
+	width: 60%;
+	margin: 2px auto;
+	text-align: center;
+}
+h3{
+	color:red;
+}
+#result{
+	text-align: right;
+	 text-align: justify;
+    text-justify: inter-word;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<div id="box">
+
+<h1>مسابقات معجمية</h1>
+
+<select id="cmd">
+<option value="anagram">شقلبة</option>
+<option value="add">زائد حروف</option>
+<option value="change">تغيير حرف</option>
+</select>
+
+<br / >
+
+<hr / >
+<input id="word" value="بلع" />
+<hr / >
+<button onclick="generate();">توليد</button>
+<hr / >
+
+<div id="result"></div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+<script src="wasit_v0.1.json"></script><!-- -->
+
+<script>
+
+
+/*
+*  Permut : Generate Anagrams
+*/
+function permut(string) {
+    if (string.length < 2) return string; // This is our break condition
+
+    var permutations = []; // This array will hold our permutations
+
+    for (var i=0; i<string.length; i++) {
+        var char = string[i];
+
+        // Cause we don't want any duplicates:
+        if (string.indexOf(char) != i) // if char was used already
+            continue;           // skip it this time
+
+        var remainingString = string.slice(0,i) + string.slice(i+1,string.length); //Note: you can concat Strings via '+' in JS
+
+        for (var subPermutation of permut(remainingString))
+            permutations.push(char + subPermutation)
+    }
+    return permutations;
+}
+
+/*
+ * generate(word, cmd, num) : Generate words based on an Arabic input
+ * CMD : Change, randomly or positon / Add, number of additional letters / remove, number of omitted letters / anagram 
+ *
+ */
+function generate(){
+	
+	// Clear
+	$("#result").empty();
+	
+	// Variables
+	var input = $("#word").val();
+	var cmd = $("#cmd").val();
+	var alphabet = ['أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و','ي'];
+	var declensions = ["َ", "ً", "ُ", "ٌ", "ِ", "ٍ", "ّ", "ْ"];
+	
+	if(cmd == "anagram")
+		var permutations = permut(input);
+	else if(cmd == "change")
+		var input_letters = input.split("");
+	
+	var result = [];
+	//var wlength = input.length
+	
+	// Script
+	for(var i=0; i< 28;i++){
+		letter = alphabet[i];
+		for(var j=0; j< data[letter].length;j++){
+			
+			var word = data[letter][j][0];
+			
+			// Remove declensions
+			for(var k = 0; k<declensions.length;k++)
+				word = word.replace(declensions[k], "");
+			
+			
+			// Remove Al- if word not in letter Alif else check supperior to 3 but if input contains al ?
+				// ...
+			
+			// Trial
+			if(word.length>3 && word.substring(0, 2) == "ال")
+					word = word.substring(2);
+			
+			switch(cmd) {
+				case "change":
+					// Case change
+					if(word.length == input.length){
+						var word_letters = word.split("");
+						var index = 0;
+						var deff;
+						
+						
+						for(var c=0; c < input.length; c++){
+							if(input_letters[c] == word_letters[c])
+								index++;
+							else deff = c;
+						}
+						
+						if(index+1 == input.length){
+						   if($('#div'+deff).length == 0) {
+								$("#result").append("<h3>تغيير الحرف "+(deff+1)+" :</h3><br/>"+"<div id='div"+deff+"'></div><hr />");
+							}
+							$("#result #div"+deff).append("<b>"+word+" ("+data[letter][j][0]+")</b> : "+ data[letter][j][1]+"<br />");
+						}
+					}
+					break;
+					
+				case "add":
+					// Case additional
+					if(word.substring(0, input.length) == input)
+						$("#result").append("<b>"+word+" ("+data[letter][j][0]+")</b> : "+ data[letter][j][1]+"<br />");
+					break;
+					
+				case "anagram":
+					// Case anagram
+					if($.inArray(word, permutations)!=-1)
+						$("#result").append("<b>"+word+" ("+data[letter][j][0]+")</b> : "+ data[letter][j][1]+"<br />");
+					break;
+			}
+		}
+		//$("#result").append("<hr />");
+	}
+}
+
+</script>
+
+</body>
+
+</html>
