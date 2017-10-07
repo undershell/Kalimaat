@@ -1,14 +1,10 @@
-صفحة لتسهيل البحث في المسابقات المعجمية: تغيير حرف، زائد حرف، ناقص حرف، شقلبة.
+كلمات وحروف
+============
+
+مولّد كلمات مصمم خصيصا لمسابقات الحروف المعجمية مثل : شقلبة، زائد حرف، تغيير حرف.. وذلك باعتماد كلمة مدرجة
+
+تم تطوير النسخة التجريبية الأولى اعتمادا على معجم الوسيط وذلك بتحويل الكتاب إلى قاعدة بيانات
 
 ---------------------------------------------------
 
-مولّد كلمات معجمية مثل شقلبة أو زائد حرف باعتماد كلمة مدرجة
-
-محاولة تجريبية تم الاعتماد فيها على معجم الوسيط وذلك بتحويل الكتاب إلى قاعدة بيانات
-
-
-Based on a trial JSON database extracted from waseet Arabic dictionary
-
-[<a target="_blank" href="http://htmlpreview.github.io/?https://github.com/undershell/Kalimaat/blob/master/v0.1/index.html">Demo</a>]
-
-As it was design to turn on local. the demonstration may not load, the JSON file is huge (8Mo). therefore it is better to download it.
+Word Game Helper :: Based on a trial JSON database (8Mo) extracted from waseet Arabic dictionary.
