@@ -8,3 +8,6 @@
 ---------------------------------------------------
 
 Word Game Helper :: Based on a trial JSON database (8Mo) extracted from waseet Arabic dictionary.
+
+
+[<a target="_blank" href="http://htmlpreview.github.io/?https://github.com/undershell/genisnym/blob/master/index.html">Demo / تجربة</a>]
